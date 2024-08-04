@@ -18,6 +18,7 @@ export const ArticleParamsForm = () => {
 					isContainerShown && styles.container_open
 				}`}>
 				<form className={styles.form}>
+					<h2 className={styles.title}>Задайте параметры</h2>
 					<div className={styles.bottomContainer}>
 						<Button title='Сбросить' type='reset' />
 						<Button title='Применить' type='submit' />
