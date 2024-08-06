@@ -11,10 +11,6 @@ type Story = StoryObj<typeof ArticleParamsForm>;
 
 export const ArticleParamsFormStory: Story = {
 	render: () => {
-		return (
-			<>
-				<ArticleParamsForm />
-			</>
-		);
+		return <>{/*<ArticleParamsForm />*/}</>;
 	},
 };
