@@ -13,6 +13,7 @@ import {
 import { RadioGroup } from 'components/radio-group';
 import { Separator } from 'components/separator';
 import { CustomCSSProperties } from 'src/index';
+import {StoryDecorator} from "components/story-decorator";
 
 interface ArticleParamsFormProps {
 	onStyleChange: (styles: CustomCSSProperties) => void;
@@ -38,16 +39,6 @@ export const ArticleParamsForm: React.FC<ArticleParamsFormProps> = ({
 
 	const handleSubmit = (e: SyntheticEvent) => {
 		e.preventDefault();
-
-		console.log(selectedBackgroundColor);
-		console.log(selectedContentWidth);
-
-		console.log(selectedFontColor);
-
-		console.log(selectedFont);
-
-		console.log(selectedFontSize);
-
 		onStyleChange({
 			'--bg-color': selectedBackgroundColor.value,
 			'--container-width': selectedContentWidth.value,
