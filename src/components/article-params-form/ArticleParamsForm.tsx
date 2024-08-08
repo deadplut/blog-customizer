@@ -1,6 +1,7 @@
 import { ArrowButton } from 'components/arrow-button';
 import { Button } from 'components/button';
-import React, { SyntheticEvent, useState } from 'react';
+import { Text } from 'components/text';
+import React, { FormEvent, useEffect, useRef, useState } from 'react';
 import styles from './ArticleParamsForm.module.scss';
 import { Select } from 'components/select';
 import {
@@ -13,7 +14,6 @@ import {
 import { RadioGroup } from 'components/radio-group';
 import { Separator } from 'components/separator';
 import { CustomCSSProperties } from 'src/index';
-import {StoryDecorator} from "components/story-decorator";
 
 interface ArticleParamsFormProps {
 	onStyleChange: (styles: CustomCSSProperties) => void;
@@ -23,10 +23,22 @@ export const ArticleParamsForm: React.FC<ArticleParamsFormProps> = ({
 	onStyleChange,
 }) => {
 	const [isContainerShown, setIsContainerShown] = useState(false);
+	const formRef = useRef<HTMLDivElement>(null);
 	const toggleForm = () => {
 		setIsContainerShown(!isContainerShown);
 	};
+	const handleClickOutside = (event: MouseEvent) => {
+		if (formRef.current && !formRef.current.contains(event.target as Node)) {
+			setIsContainerShown(false);
+		}
+	};
 
+	useEffect(() => {
+		document.addEventListener('mousedown', handleClickOutside);
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, []);
 	const [selectedFont, setSelectedFont] = useState(fontFamilyOptions[0]);
 	const [selectedFontSize, setSelectedFontSize] = useState(fontSizeOptions[0]);
 	const [selectedFontColor, setSelectedFontColor] = useState(fontColors[0]);
@@ -37,7 +49,7 @@ export const ArticleParamsForm: React.FC<ArticleParamsFormProps> = ({
 		contentWidthArr[0]
 	);
 
-	const handleSubmit = (e: SyntheticEvent) => {
+	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		onStyleChange({
 			'--bg-color': selectedBackgroundColor.value,
@@ -60,11 +72,14 @@ export const ArticleParamsForm: React.FC<ArticleParamsFormProps> = ({
 		<>
 			<ArrowButton onClick={toggleForm} isShown={isContainerShown} />
 			<aside
+				ref={formRef}
 				className={`${styles.container} ${
 					isContainerShown && styles.container_open
 				}`}>
 				<form className={styles.form} onSubmit={handleSubmit}>
-					<h2 className={styles.title}>Задайте параметры</h2>
+					<Text as='h2' size={31} weight={800} uppercase>
+						Задайте параметры
+					</Text>
 					<Select
 						selected={selectedFont}
 						onChange={setSelectedFont}
@@ -98,7 +113,7 @@ export const ArticleParamsForm: React.FC<ArticleParamsFormProps> = ({
 						title='Ширина контента'
 					/>
 					<div className={styles.bottomContainer}>
-						<Button title='Сбросить' type='reset' onClick={handleReset} />
+						<Button title='Сбросить' type='reset' onReset={handleReset} />
 						<Button title='Применить' type='submit' />
 					</div>
 				</form>
